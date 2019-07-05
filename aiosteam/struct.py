@@ -13,7 +13,7 @@ class Player:
     communityvisibilitystate: int
     profilestate: int
     lastlogoff: int
-    commentpermission: str
+    commentpermission: str = None
     realname: str = None
     primaryclanid: int = None
     timecreated: int = None

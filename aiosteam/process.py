@@ -13,7 +13,12 @@ class Get:
         self.request_types = {
             'get_player': Player,
             'get_player_bans': PlayerBans,
-            'vanityurl_to_steamid': ConvertedURL
+            'vanityurl_to_steamid': ConvertedURL,
+            'get_friendlist': Friend,
+            'get_achievements': Achievement,
+            'get_game_user_stats': GameStat,
+            'get_owned_games': OwnedGame,
+            'get_recently_played': RecentlyPlayedGame
         }
 
         self.request_key = {
@@ -28,11 +33,11 @@ class Get:
         }
 
         self.special_process = {
-            'get_friendlist': self.friendlist_process,
-            'get_achievements': self.achievements_process,
-            'get_game_user_stats': self.game_user_stats_process,
-            'get_owned_games': self.owned_games_process,
-            'get_recently_played': self.recently_played_process
+            'get_friendlist': self.special_loop_process,
+            'get_achievements': self.special_loop_process,
+            'get_game_user_stats': self.special_loop_process,
+            'get_owned_games': self.special_loop_process,
+            'get_recently_played': self.special_loop_process
         }
 
     async def process(self) -> Union[ConvertedURL, PlayerBans, Player, list]:
@@ -57,44 +62,12 @@ class Get:
                 return request_class(**resp_fetch)
 
             else:
-                return self.special_process[self.main.request](resp_fetch)
+                return self.special_process[self.main.request](resp_fetch, self.main.request)
 
-    def friendlist_process(self, friendlist: list) -> list:
-        friendlist_return = []
+    def special_loop_process(self, to_list: list, request_type: str) -> list:
+        return_list = []
 
-        for dict_object in friendlist:
-            friendlist_return.append(Friend(**dict_object))
+        for dict_obj in to_list:
+            return_list.append(self.request_types[request_type](**dict_obj))
 
-        return friendlist_return
-
-    def achievements_process(self, achievements: list) -> list:
-        achievements_return = []
-
-        for dict_obj in achievements:
-            achievements_return.append(Achievement(**dict_obj))
-
-        return achievements_return
-
-    def game_user_stats_process(self, user_stats: list) -> list:
-        user_stats_return = []
-
-        for dict_obj in user_stats:
-            user_stats_return.append(GameStat(**dict_obj))
-
-        return user_stats_return
-
-    def owned_games_process(self, owned_games: list) -> list:
-        owned_games_return = []
-
-        for dict_obj in owned_games:
-            owned_games_return.append(OwnedGame(**dict_obj))
-
-        return owned_games_return
-
-    def recently_played_process(self, recently: list) -> list:
-        recently_return = []
-
-        for dict_obj in recently:
-            recently_return.append(RecentlyPlayedGame(**dict_obj))
-
-        return recently_return
+        return return_list
