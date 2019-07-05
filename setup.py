@@ -5,7 +5,7 @@ with open('README.md', 'r') as f:
 
 setuptools.setup(
     name='aiosteam',
-    version="0.0.1a",
+    version='0.0.2a',
     author='truedl',
     description='An asynchronous steam API wrapper written in Python.',
     long_description=long_description,
