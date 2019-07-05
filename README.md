@@ -1,7 +1,12 @@
 # aiosteam
 An asynchronous steam API wrapper written in Python.
 
-# Todo
+## Installation
+```py
+py -m pip install aiosteam
+```
+
+## Todo
 - [ ] Documentation
 - [ ] More functionality
 - [ ] Examples
