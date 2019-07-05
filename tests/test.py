@@ -6,9 +6,9 @@ asteam = aiosteam.Apply(
 )
 
 async def task():
-    request = asteam.custom_to_steamid('test')
-    resp = await request.process()
-    print(resp)
+    converted = await asteam.custom_to_steamid('test').process()
+    request = await asteam.get_friendlist(steamid=converted.steamid).process()
+    print(request)
     await asteam.close_session()
 
 loop = asyncio.get_event_loop()
